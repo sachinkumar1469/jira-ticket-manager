@@ -1,0 +1,6 @@
+window.getComputedStyle
+
+getPropertyValue
+
+gap
+
