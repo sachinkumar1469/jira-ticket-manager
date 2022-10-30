@@ -4,3 +4,5 @@ getPropertyValue
 
 gap
 
+forEach function second parameter callback ko index value pass karta ha
+
