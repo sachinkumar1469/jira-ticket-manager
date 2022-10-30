@@ -9,6 +9,7 @@ let modaleCurrColor = colors[colors.length-1];
 
 let modaleColors = document.querySelectorAll('.modaleColors');
 
+let lockIcon = document.querySelector('.lockIcon');
 // Add btn event listener to open or close modale
 addBtn.addEventListener('click',(e)=>{
     modaleFlag = !modaleFlag;
@@ -35,7 +36,7 @@ modale.addEventListener('keydown',(e)=>{
     let key = e.key;
     
     if(key === "Shift"){
-        createTicket(modaleCurrColor,"1234",modaleTextarea.value);
+        createTicket(modaleCurrColor,shortid(),modaleTextarea.value);
         
         modaleFlag = false;
         modaleHandler();
@@ -48,8 +49,10 @@ function createTicket(priorityColor,ticketId,ticketContent){
     let ticketContainer = document.createElement('div');
     ticketContainer.setAttribute('class','ticket-container');
     ticketContainer.innerHTML = `<div class="ticket-priority ${priorityColor}"></div>
-    <div class="ticket-id">${ticketId}</div>
-    <div class="ticket-content">${ticketContent}</div>`;
+    <div class="ticket-id">#${ticketId}</div>
+    <div class="ticket-content">${ticketContent}</div>
+    <div class="ticket-lock"><i class="fa-solid fa-lock"></i></div>
+    `;
     document.querySelector('.main').appendChild(ticketContainer);
 }
 
@@ -58,10 +61,15 @@ modaleColors.forEach((modaleColor,index)=>{
     modaleColor.addEventListener('click',(e)=>{
         let previousSelected = colors.indexOf(modaleCurrColor);
         modaleColors[previousSelected].classList.remove("borderActive");
-        console.log(modaleColors[previousSelected].classList)
+        // console.log(modaleColors[previousSelected].classList)
         modaleColor.classList.add("borderActive");
         modaleCurrColor = colors[index];
     })
+});
+
+
+lockIcon.addEventListener('click',(e)=>{
+    
 })
 
 
