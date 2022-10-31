@@ -119,14 +119,18 @@ function lockHandler(ticket){
             lockIcon.classList.remove('fa-lock-open');
             lockIcon.classList.add('fa-lock');
             ticketContentEl.removeAttribute('contenteditable');
-            let currElId = JSON.stringify(e.target.parentElement.parentElement.querySelector('.ticket-id').textContent);
+            let currElId = (e.target.parentElement.parentElement.querySelector('.ticket-id').textContent).slice(1);
             
             console.log(currElId);
-            console.log(arrOfTicketsObject);
+            // console.log(arrOfTicketsObject);
             let filterReturn = arrOfTicketsObject.filter((ticketObj)=>{
-                return currElId === ticketObj['ticketId']
+                return currElId == ticketObj['ticketId']
             });
-            console.log(filterReturn);
+            let indexOfticket = arrOfTicketsObject.indexOf(filterReturn[0]);
+            let updatedValue = e.target.parentElement.parentElement.querySelector('.ticket-content').textContent;
+            arrOfTicketsObject[indexOfticket]['ticketContent'] = updatedValue;
+            localStorage.setItem("objLocalStorage",JSON.stringify(arrOfTicketsObject));
+            
         }
     })
 }
@@ -142,7 +146,17 @@ function ticketColorChangeHandler(ticket){
         currIndex++;
         currIndex%=4;
         ticketPriorityEl.classList.add(colors[currIndex]);
-        // console.log(currIndex,"next");
+
+        let currElId = (e.target.parentElement.querySelector('.ticket-id').textContent).slice(1);           
+        console.log(currElId);
+        let filterReturn = arrOfTicketsObject.filter((ticketObj)=>{
+            return currElId == ticketObj['ticketId']
+        });
+        let indexOfticket = arrOfTicketsObject.indexOf(filterReturn[0]);
+        console.log(indexOfticket);
+        arrOfTicketsObject[indexOfticket]['priorityColor'] = colors[currIndex] ;
+        localStorage.setItem("objLocalStorage",JSON.stringify(arrOfTicketsObject));
+      
         
     })
 }
