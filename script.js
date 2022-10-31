@@ -3,13 +3,14 @@ let addBtn = document.querySelector('.add-btn');
 let modale = document.querySelector('.modale-container');
 let modaleTextarea = document.querySelector('#modaleTextarea');
 let modaleFlag = false;
+let arrOfTicketsObject = [];
 
 let colors = ["lightpink","lightblue","lightgreen","black"];
 let modaleCurrColor = colors[colors.length-1];
 
 let modaleColors = document.querySelectorAll('.modaleColors');
 
-
+let navPriorityColors = document.querySelectorAll('.color');
 // Add btn event listener to open or close modale
 addBtn.addEventListener('click',(e)=>{
     modaleFlag = !modaleFlag;
@@ -54,14 +55,12 @@ function createTicket(priorityColor,ticketId,ticketContent){
     <div class="ticket-lock"><i class="fa-solid fa-lock"></i></div>
     `;
     document.querySelector('.main').appendChild(ticketContainer);
-
+    arrOfTicketsObject.push({priorityColor,ticketId,ticketContent});
     lockHandler(ticketContainer);
     ticketColorChangeHandler(ticketContainer);
 }
 
-
-
-
+// Lock button toggle
 function lockHandler(ticket){
     let lockIcon = ticket.lastElementChild.children[0];
     lockIcon.addEventListener('click',(e)=>{
@@ -81,6 +80,7 @@ function lockHandler(ticket){
     })
 }
 
+// Ticket priority color toggle
 function ticketColorChangeHandler(ticket){
     let ticketPriorityEl = ticket.querySelector('.ticket-priority');
     ticketPriorityEl.addEventListener('click',(e)=>{
@@ -106,6 +106,38 @@ modaleColors.forEach((modaleColor,index)=>{
         modaleCurrColor = colors[index];
     })
 });
+
+// Event listener on navbar priority colors
+navPriorityColors.forEach((navColor)=>{
+    
+    navColor.addEventListener('click',(e)=>{
+        let currColor = navColor.classList[0];
+        // console.log(currColor);
+        let allTickets = document.querySelectorAll('.ticket-container');
+        // console.log(allTickets);
+        allTickets.forEach((tickets)=>{
+            let firstChildOfTicket = tickets.firstElementChild;
+            let ticketColor = firstChildOfTicket.classList[1];
+            if(currColor===ticketColor){
+                tickets.style.display="block";
+            } else {
+                tickets.style.display="none";              
+            }
+        })
+        e.stopPropagation();
+        console.log("first click")
+    });
+    navColor.addEventListener('dblclick',(e)=>{
+        
+        let allTickets = document.querySelectorAll('.ticket-container');
+        allTickets.forEach((tickets)=>{
+            tickets.style.display="block";
+        })
+    })
+});
+
+
+    
 
 
 
