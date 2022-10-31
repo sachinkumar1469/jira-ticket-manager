@@ -7,3 +7,5 @@ gap
 forEach function second parameter callback ko index value pass karta ha
 
 findIndex function
+
+local storage/ session storage

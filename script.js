@@ -4,7 +4,7 @@ let modale = document.querySelector('.modale-container');
 let modaleTextarea = document.querySelector('#modaleTextarea');
 let modaleFlag = false;
 let arrOfTicketsObject = [];
-
+// localStorage.setItem('arrOfTicketsObject',JSON.stringify(arrOfTicketsObject));
 let colors = ["lightpink","lightblue","lightgreen","black"];
 let modaleCurrColor = colors[colors.length-1];
 
@@ -31,34 +31,64 @@ function modaleHandler(){
     }
 }
 
+//Event listener to select priority color for modale
+modaleColors.forEach((modaleColor,index)=>{
+    modaleColor.addEventListener('click',(e)=>{
+        let previousSelected = colors.indexOf(modaleCurrColor);
+        modaleColors[previousSelected].classList.remove("borderActive");
+        // console.log(modaleColors[previousSelected].classList)
+        modaleColor.classList.add("borderActive");
+        modaleCurrColor = colors[index];
+    })
+});
 
 // Shift event listener on modale to create new ticket
 modale.addEventListener('keydown',(e)=>{
     let key = e.key;
     
     if(key === "Shift"){
-        createTicket(modaleCurrColor,shortid(),modaleTextarea.value);
-        
+        createTicket(modaleCurrColor,shortid(),modaleTextarea.value);        
         modaleFlag = false;
-        modaleHandler();
-        
+        modaleHandler();       
     }
-})
+});
+
+
 
 // Function to create a new ticket
 function createTicket(priorityColor,ticketId,ticketContent){
-    let ticketContainer = document.createElement('div');
-    ticketContainer.setAttribute('class','ticket-container');
-    ticketContainer.innerHTML = `<div class="ticket-priority ${priorityColor}"></div>
-    <div class="ticket-id">#${ticketId}</div>
-    <div class="ticket-content">${ticketContent}</div>
-    <div class="ticket-lock"><i class="fa-solid fa-lock"></i></div>
-    `;
-    document.querySelector('.main').appendChild(ticketContainer);
     arrOfTicketsObject.push({priorityColor,ticketId,ticketContent});
-    lockHandler(ticketContainer);
-    ticketColorChangeHandler(ticketContainer);
+    arrOfTicketsObject = [...objLocalStorage = JSON.parse(localStorage.getItem("objLocalStorage")),...arrOfTicketsObject];
+    localStorage.setItem("objLocalStorage",JSON.stringify(arrOfTicketsObject));
+    
+    renderTicket();
+    
 }
+
+function renderTicket(){
+    objLocalStorage = JSON.parse(localStorage.getItem("objLocalStorage"));
+    
+    Array.from(document.querySelector('.main').children).forEach((child)=>{
+        child.remove();
+    })
+    // console.log(Array.isArray(arrOfTicketsObject));
+    if(objLocalStorage){
+        objLocalStorage.forEach((ticketObject)=>{
+            let ticketContainer = document.createElement('div');
+            ticketContainer.setAttribute('class','ticket-container');
+            ticketContainer.innerHTML = `<div class="ticket-priority ${ticketObject['priorityColor']}"></div>
+            <div class="ticket-id">#${ticketObject['ticketId']}</div>
+            <div class="ticket-content">${ticketObject['ticketContent']}</div>
+            <div class="ticket-lock"><i class="fa-solid fa-lock"></i></div>
+            `;
+            document.querySelector('.main').appendChild(ticketContainer);
+            lockHandler(ticketContainer);
+            ticketColorChangeHandler(ticketContainer);
+        });
+    }
+    
+}
+renderTicket();
 
 // Lock button toggle
 function lockHandler(ticket){
@@ -96,16 +126,7 @@ function ticketColorChangeHandler(ticket){
     })
 }
 
-//Event listener to select priority color for modale
-modaleColors.forEach((modaleColor,index)=>{
-    modaleColor.addEventListener('click',(e)=>{
-        let previousSelected = colors.indexOf(modaleCurrColor);
-        modaleColors[previousSelected].classList.remove("borderActive");
-        // console.log(modaleColors[previousSelected].classList)
-        modaleColor.classList.add("borderActive");
-        modaleCurrColor = colors[index];
-    })
-});
+
 
 // Event listener on navbar priority colors
 navPriorityColors.forEach((navColor)=>{
