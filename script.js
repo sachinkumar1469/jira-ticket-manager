@@ -4,6 +4,11 @@ let modale = document.querySelector('.modale-container');
 let modaleTextarea = document.querySelector('#modaleTextarea');
 let modaleFlag = false;
 let arrOfTicketsObject = [];
+
+if(JSON.parse(localStorage.getItem("objLocalStorage"))){   
+    arrOfTicketsObject = [...JSON.parse(localStorage.getItem("objLocalStorage"))];
+}
+
 // localStorage.setItem('arrOfTicketsObject',JSON.stringify(arrOfTicketsObject));
 let colors = ["lightpink","lightblue","lightgreen","black"];
 let modaleCurrColor = colors[colors.length-1];
@@ -57,8 +62,15 @@ modale.addEventListener('keydown',(e)=>{
 
 // Function to create a new ticket
 function createTicket(priorityColor,ticketId,ticketContent){
+    
+    if(JSON.parse(localStorage.getItem("objLocalStorage"))){
+        // console.log("local is not null");
+        arrOfTicketsObject = [...JSON.parse(localStorage.getItem("objLocalStorage"))];
+        // console.log(arrOfTicketsObject);
+    } else {
+        console.log("local is null");
+    }
     arrOfTicketsObject.push({priorityColor,ticketId,ticketContent});
-    arrOfTicketsObject = [...objLocalStorage = JSON.parse(localStorage.getItem("objLocalStorage")),...arrOfTicketsObject];
     localStorage.setItem("objLocalStorage",JSON.stringify(arrOfTicketsObject));
     
     renderTicket();
@@ -66,6 +78,7 @@ function createTicket(priorityColor,ticketId,ticketContent){
 }
 
 function renderTicket(){
+    // arrOfTicketsObject = JSON.parse(localStorage.getItem("objLocalStorage"));
     objLocalStorage = JSON.parse(localStorage.getItem("objLocalStorage"));
     
     Array.from(document.querySelector('.main').children).forEach((child)=>{
@@ -106,6 +119,14 @@ function lockHandler(ticket){
             lockIcon.classList.remove('fa-lock-open');
             lockIcon.classList.add('fa-lock');
             ticketContentEl.removeAttribute('contenteditable');
+            let currElId = JSON.stringify(e.target.parentElement.parentElement.querySelector('.ticket-id').textContent);
+            
+            console.log(currElId);
+            console.log(arrOfTicketsObject);
+            let filterReturn = arrOfTicketsObject.filter((ticketObj)=>{
+                return currElId === ticketObj['ticketId']
+            });
+            console.log(filterReturn);
         }
     })
 }
