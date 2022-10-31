@@ -9,7 +9,7 @@ let modaleCurrColor = colors[colors.length-1];
 
 let modaleColors = document.querySelectorAll('.modaleColors');
 
-let lockIcon = document.querySelector('.lockIcon');
+
 // Add btn event listener to open or close modale
 addBtn.addEventListener('click',(e)=>{
     modaleFlag = !modaleFlag;
@@ -54,6 +54,30 @@ function createTicket(priorityColor,ticketId,ticketContent){
     <div class="ticket-lock"><i class="fa-solid fa-lock"></i></div>
     `;
     document.querySelector('.main').appendChild(ticketContainer);
+
+    lockHandler(ticketContainer);
+}
+
+
+
+
+function lockHandler(ticket){
+    let lockIcon = ticket.lastElementChild.children[0];
+    lockIcon.addEventListener('click',(e)=>{
+        let lockClassList = lockIcon.classList;
+        let classListArray = Array.from(lockClassList);
+        let ticketContentEl = ticket.querySelector('.ticket-content');
+        // console.log(ticketContentEl);
+        if(classListArray.includes('fa-lock')){
+            lockIcon.classList.remove('fa-lock');
+            lockIcon.classList.add('fa-lock-open');
+            ticketContentEl.setAttribute('contenteditable','true');
+        } else {
+            lockIcon.classList.remove('fa-lock-open');
+            lockIcon.classList.add('fa-lock');
+            ticketContentEl.removeAttribute('contenteditable');
+        }
+    })
 }
 
 //Event listener to select priority color for modale
@@ -68,9 +92,7 @@ modaleColors.forEach((modaleColor,index)=>{
 });
 
 
-lockIcon.addEventListener('click',(e)=>{
-    
-})
+
 
 
 
