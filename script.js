@@ -56,6 +56,7 @@ function createTicket(priorityColor,ticketId,ticketContent){
     document.querySelector('.main').appendChild(ticketContainer);
 
     lockHandler(ticketContainer);
+    ticketColorChangeHandler(ticketContainer);
 }
 
 
@@ -77,6 +78,21 @@ function lockHandler(ticket){
             lockIcon.classList.add('fa-lock');
             ticketContentEl.removeAttribute('contenteditable');
         }
+    })
+}
+
+function ticketColorChangeHandler(ticket){
+    let ticketPriorityEl = ticket.querySelector('.ticket-priority');
+    ticketPriorityEl.addEventListener('click',(e)=>{
+        let currColor = ticketPriorityEl.classList[1];
+        ticketPriorityEl.classList.remove(currColor);
+        let currIndex = colors.indexOf(currColor);
+        // console.log(currIndex,"current")
+        currIndex++;
+        currIndex%=4;
+        ticketPriorityEl.classList.add(colors[currIndex]);
+        // console.log(currIndex,"next");
+        
     })
 }
 
