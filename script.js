@@ -9,6 +9,19 @@ if(JSON.parse(localStorage.getItem("objLocalStorage"))){
     arrOfTicketsObject = [...JSON.parse(localStorage.getItem("objLocalStorage"))];
 }
 
+let removeFlag = false;
+let removeBtn = document.querySelector('.remove-btn');
+
+removeBtn.addEventListener('click',(e)=>{
+    removeFlag = !removeFlag;
+    if(removeFlag){
+        removeBtn.style.backgroundColor = "#718093";
+    } else {
+        removeBtn.style.backgroundColor = "grey";
+    }
+})
+
+
 // localStorage.setItem('arrOfTicketsObject',JSON.stringify(arrOfTicketsObject));
 let colors = ["lightpink","lightblue","lightgreen","black"];
 let modaleCurrColor = colors[colors.length-1];
@@ -97,11 +110,24 @@ function renderTicket(){
             document.querySelector('.main').appendChild(ticketContainer);
             lockHandler(ticketContainer);
             ticketColorChangeHandler(ticketContainer);
+            removeTicketHandler(ticketContainer);
         });
     }
     
 }
 renderTicket();
+
+
+function removeTicketHandler(ticket){
+    ticket.addEventListener('click',(e)=>{
+        if(removeFlag){
+            ticket.remove();
+            e.stopPropagation();
+            
+        }
+        
+    })
+}
 
 // Lock button toggle
 function lockHandler(ticket){
